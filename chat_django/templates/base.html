@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>Messaging App</title>
+		<meta name="description" content="Yok" />		<!-- Favicon -->
+		<link rel="shortcut icon" href="/static/static2/dist/img/logo.png">
+		<link rel="icon" href="/static/static2/dist/img/cs-logo.png" type="image/x-icon">
+		<!-- vector map CSS -->
+		<link href="/static/static2/vendors/bower_components/jquery-wizard.js/css/wizard.css" rel="stylesheet" type="text/css"/>
+
+		<!-- jquery-steps css -->
+		<link rel="stylesheet" href="/static/static2/vendors/bower_components/jquery.steps/demo/css/jquery.steps.css">
+
+		<!-- Data table CSS -->
+		<link href="/static/static2/vendors/bower_components/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+
+		<!-- Fancy-Buttons CSS -->
+		<link href="/static/static2/dist/css/fancy-buttons.css" rel="stylesheet" type="text/css">
+
+		<!-- xeditable css -->
+		<link href="/static/static2/vendors/bower_components/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet" />
+
+		<!-- Footable CSS -->
+		<link href="/static/static2/vendors/bower_components/FooTable/compiled/footable.bootstrap.min.css" rel="stylesheet" type="text/css"/>
+
+		<!-- Morris Charts CSS -->
+	  <link href="/static/static2/vendors/bower_components/morris.js/morris.css" rel="stylesheet" type="text/css"/>
+
+		<!-- Bootstrap Dropify CSS -->
+		<link href="/static/static2/vendors/bower_components/dropify/dist/css/dropify.min.css" rel="stylesheet" type="text/css"/>
+
+		<!-- bootstrap-touchspin CSS -->
+		<link href="/static/static2/vendors/bower_components/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css" rel="stylesheet" type="text/css"/>
+
+		<!-- Bootstrap Wysihtml5 css -->
+		<link rel="stylesheet" href="/static/static2/vendors/bower_components/bootstrap3-wysihtml5-bower/dist/bootstrap3-wysihtml5.css" />
+
+		<!-- switchery CSS -->
+		<link href="/static/static2/vendors/bower_components/switchery/dist/switchery.min.css" rel="stylesheet" type="text/css"/>
+
+
+		<!-- Custom CSS -->
+		<link href="/static/static2/dist/css/style.css" rel="stylesheet" type="text/css">
+
+		<link href="/static/code_css/prism.css" rel="stylesheet" type="text/css">
+
+		<link href="/static/static2/vendors/bower_components/jquery-toast-plugin/dist/jquery.toast.min.css" rel="stylesheet" type="text/css">
+	</head>
+	<body>
+		<!--Preloader-->
+		<div class="preloader-it">
+			<div class="la-anim-1"></div>
+		</div>
+		<!--/Preloader-->
+		<div class="wrapper theme-1-active pimary-color-green">
+
+			<!-- Top Menu Items -->
+			<nav class="navbar navbar-inverse navbar-fixed-top">
+				<div class="mobile-only-brand pull-left">
+					<div class="nav-header pull-left">
+						<div class="logo-wrap">
+							<a href="/">
+								<img weight="150px" height="37px" class="brand-img" src="http://statics-csrx.s3-website.eu-west-2.amazonaws.com/cyberstruggleLogoLight.png" alt="brand"/>
+							</a>
+						</div>
+					</div>
+					<a id="toggle_nav_btn" class="toggle-left-nav-btn inline-block ml-20 pull-left" href="javascript:void(0);"><i class="zmdi zmdi-menu"></i></a>
+					<a id="toggle_mobile_nav" class="mobile-only-view" href="javascript:void(0);"><i class="zmdi zmdi-more"></i></a>
+				</div>
+				<div id="mobile_only_nav" class="mobile-only-nav pull-right">
+					<ul class="nav navbar-right top-nav pull-right">
+
+						<li class="dropdown alert-drp">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="zmdi zmdi-notifications top-nav-icon"></i><span id="notify_icon" class="top-nav-icon-badge">0</span></a>
+							<ul  class="dropdown-menu alert-dropdown" data-dropdown-in="bounceIn" data-dropdown-out="bounceOut">
+								<li>
+									<div class="notification-box-head-wrap">
+										<span class="notification-box-head pull-left inline-block">notifications</span>
+										<a class="txt-danger pull-right clear-notifications inline-block" href="javascript:void(0)"> close </a>
+										<div class="clearfix"></div>
+										<hr class="light-grey-hr ma-0"/>
+									</div>
+								</li>
+								<li>
+									<div id="notify_area" class="streamline message-nicescroll-bar">
+									</div>
+								</li>
+								<li>
+									<div class="notification-box-bottom-wrap">
+										<hr class="light-grey-hr ma-0"/>
+										<a class="block text-center read-all" href="/notifications"> read all </a>
+										<div class="clearfix"></div>
+									</div>
+								</li>
+							</ul>
+						</li>
+
+
+						<li>
+							<a href="/profile"><img src="http://s3.eu-west-2.amazonaws.com/statics-csrx/static/static2/dist/img/tardigrades.jpg" alt="user_auth" class="user-auth-img img-circle"/><span class="user-online-status"></span></a>
+						</li>
+						<li>
+							<a href="/logout"><i class="txt-dark zmdi zmdi-power"></i></a>
+						</li>
+					</ul>
+				</div>
+			</nav>
+			<!-- /Top Menu Items -->
+
+			<!-- Left Sidebar Menu -->
+			<div class="fixed-sidebar-left">
+				<ul class="nav navbar-nav side-nav nicescroll-bar">
+					<li class="navigation-header">
+						<span>Main</span>
+						<i class="zmdi zmdi-more"></i>
+					</li>
+					<li>
+						<a href="/"><div class="pull-left"><i class="zmdi zmdi-home mr-20"></i><span class="right-nav-text">{% if user.is_superuser %}Instructor Panel{% else %}Homepage{% endif%}</span></div><div class="pull-right"></div><div class="clearfix"></div></a>
+					</li>
+					<li>
+						{% if user.is_superuser %}
+						<a href="/adminxd/message"><div class="pull-left"><i class="zmdi zmdi-inbox mr-20"></i><span class="right-nav-text">Message Inbox</span></div><div class="pull-right"></div>  <div class="clearfix"></div></a>
+						{% else %}
+						<a href="/message"><div class="pull-left"><i class="zmdi zmdi-inbox mr-20"></i><span class="right-nav-text">Message Inbox</span></div><div class="pull-right"></div><div class="pull-right"><span id="mesaj_c" class="label">0</span></div><div class="clearfix"></div></a>
+						{% endif %}
+
+					</li>
+					<li><hr class="light-grey-hr mb-10"/></li>
+					<li class="navigation-header">
+						<span>Program</span>
+						<i class="zmdi zmdi-more"></i>
+					</li>
+					<li>
+						<a href="javascript:void(0);" data-toggle="collapse" data-target="#ui_dr"><div class="pull-left"><i class="zmdi zmdi-folder-outline mr-20"></i><span class="right-nav-text">Odev Sistemi</span></div><div class="pull-right"><i class="zmdi zmdi-caret-down"></i></div><div class="clearfix"></div></a>
+						<ul id="ui_dr" class="collapse collapse-level-1 two-col-list">
+							<li>
+								<a href="/homework/"><div class="pull-left"><span class="right-nav-text">Odevler</span></div><div class="pull-right"><span id="odev_c" class="label">0</span></div><div class="clearfix"></div></a>
+							</li>
+							<li id="debrief">
+								<a href="/homework/debrief/">Debrief</a>
+							</li>
+							<li>
+								<a href="/homework/news/">News Analysis</a>
+							</li>
+							<li>
+								<a href="/homework/dguyi/">Dguyi</a>
+							</li>
+							<li>
+								<a href="/homework/ogop/">Ogop</a>
+							</li>
+							<li>
+								<a href="/homework/parfum/">Parfum</a>
+							</li>
+							<li>
+								<a href="/homework/dur/">Dur</a>
+							</li>
+							<li>
+								<a href="/homework/mentor/">Mentor Temasi</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a id="lab_href" href="#"><div class="pull-left"><i class="zmdi zmdi-laptop mr-20"></i><span class="right-nav-text">Simülasyon</span></div><div class="pull-right"><span id="lab_c" class="label">Closed</span></div><div class="clearfix"></div></a>
+					</li>
+					<li>
+						<a href="javascript:void(0);" data-toggle="collapse" data-target="#teorik"><div class="pull-left"><i class="zmdi zmdi-folder-outline mr-20"></i><span class="right-nav-text">Teorik Çalışmalar</span></div><div class="pull-right"><i class="zmdi zmdi-caret-down"></i></div><div class="clearfix"></div></a>
+						<ul id="teorik" class="collapse collapse-level-1 two-col-list">
+							<li>
+								<a href="/teorik"><div class="pull-left"><span class="right-nav-text">Haftalik Test</span></div><div class="pull-right"><span id="test_c" class="label">Open</span></div><div class="clearfix"></div></a>
+							</li>
+							<li>
+								<a href="/code-review"><div class="pull-left"><span class="right-nav-text">Kod Analizi</span></div><div class="pull-right"></div><div class="clearfix"></div></a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="/incident"><div class="pull-left"><i class="zmdi zmdi-desktop-windows mr-20"></i><span class="right-nav-text">Incident</span></div><div class="pull-right"><span id="incident_c" class="label">Closed</span></div><div class="clearfix"></div></a>
+					</li>
+					<li>
+						<a href="/notifications"><div class="pull-left"><i class="zmdi zmdi-notifications-none mr-20"></i><span class="right-nav-text">Bildirimler</span></div><div class="pull-right"><span id="notifications_c" class="label label-success">5+</span></div><div class="clearfix"></div></a>
+					</li>
+					<li><hr class="light-grey-hr mb-10"/></li>
+					<li class="navigation-header">
+						<span>Bilgilendirmeler</span>
+					</li>
+					<li>
+						<a href="javascript:void(0);" data-toggle="collapse" data-target="#kurallar"><div class="pull-left"><i class="zmdi zmdi-folder-outline mr-20"></i><span class="right-nav-text">Kurallar</span></div><div class="pull-right"><i class="zmdi zmdi-caret-down"></i></div><div class="clearfix"></div></a>
+						<ul id="kurallar" class="collapse collapse-level-1 two-col-list">
+							<li>
+								<a href="/kural-program/">Program Kurallari</a>
+							</li>
+							<li>
+								<a href="/kural-hw/">Hellweek Kurallari</a>
+							</li>
+							<li>
+								<a href="/kriterler/">Degerlendirme Kriterleri</a>
+							</li>
+						</ul>
+					</li>
+					<li><hr class="light-grey-hr mb-10"/></li>
+					<li class="navigation-header">
+						<span>Credits</span>
+					</li>
+					<li>
+						<a href="/credits"><div class="pull-left"><i class="zmdi zmdi-accounts-outline mr-20"></i><span class="right-nav-text">Credits</span></div><div class="clearfix"></div></a>
+					</li>
+				</ul>
+			</div>
+			<!-- /Left Sidebar Menu -->
+
+
+
+
+<!-- MAIN CONTENT HERE -->
+
+{% block ranger_content %}
+{% endblock %}
+
+{% block ranger_contentx %}
+{% endblock %}
+
+
+</div>
+
+
+
+<!-- JavaScript -->
+
+<!-- jQuery -->
+<script src="/static/static2/vendors/bower_components/jquery/dist/jquery.js"></script>
+
+<!-- Moment JavaScript -->
+<script type="text/javascript" src="/static/static2/vendors/bower_components/moment/min/moment-with-locales.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/static/static2/vendors/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/static/static2/vendors/bower_components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js"></script>
+<script src="/static/static2/dist/js/modal-data.js"></script>
+<script type="text/javascript" src="/static/static2/vendors/bower_components/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+
+
+<!-- wysuhtml5 Plugin JavaScript -->
+<script src="/static/static2/vendors/bower_components/wysihtml5x/dist/wysihtml5x.min.js"></script>
+
+<script src="/static/static2/vendors/bower_components/bootstrap3-wysihtml5-bower/dist/bootstrap3-wysihtml5.all.js"></script>
+
+
+<!-- Bootstrap Daterangepicker JavaScript -->
+<script src="/static/static2/vendors/bower_components/dropify/dist/js/dropify.min.js"></script>
+
+<!-- Progressbar Animation JavaScript -->
+<script src="/static/static2/vendors/bower_components/waypoints/lib/jquery.waypoints.min.js"></script>
+<script src="/static/static2/vendors/bower_components/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>
+<script src="/static/static2/dist/js/skills-counter-data.js"></script>
+
+<!-- Form Wizard JavaScript -->
+<script src="/static/static2/vendors/bower_components/jquery.steps/build/jquery.steps.min.js"></script>
+<script src="/static/static2/src/jquery.validate.min.js"></script>
+
+<!-- Form Wizard Data JavaScript -->
+<script src="/static/static2/dist/js/form-wizard-data.js"></script>
+
+<!-- Form Flie Upload Data JavaScript -->
+<script src="/static/static2/dist/js/form-file-upload-data.js"></script>
+
+<!-- Data table JavaScript -->
+<script src="/static/static2/vendors/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+<script src="/static/static2/vendors/bower_components/moment/min/moment.min.js"></script>
+<script src="/static/static2/vendors/bower_components/FooTable/compiled/footable.js" type="text/javascript"></script>
+
+<!-- Morris Charts JavaScript -->
+<script src="/static/static2/vendors/bower_components/raphael/raphael.min.js"></script>
+<script src="/static/static2/vendors/bower_components/morris.js/morris.min.js"></script>
+
+<!-- Notifications JavaScript -->
+<script src="/static/static2/vendors/bower_components/jquery-toast-plugin/dist/jquery.toast.min.js"></script>
+<script src="/static/static2/src/jquery.mask.js"></script>
+
+
+<!-- Form-xeditable Init JavaScript -->
+<script src="/static/static2/dist/js/form-xeditable-data.js"></script>
+
+<!-- Slimscroll JavaScript -->
+<script src="/static/static2/dist/js/jquery.slimscroll.js"></script>
+
+<!-- Fancy Dropdown JS -->
+<script src="/static/static2/dist/js/dropdown-bootstrap-extended.js"></script>
+
+<!-- Owl JavaScript -->
+<script src="/static/static2/vendors/bower_components/owl.carousel/dist/owl.carousel.min.js"></script>
+
+<!-- EChartJS JavaScript -->
+<script src="/static/static2/vendors/bower_components/echarts/dist/echarts-en.min.js"></script>
+<script src="/static/static2/vendors/echarts-liquidfill.min.js"></script>
+
+<!-- Switchery JavaScript -->
+<script src="/static/static2/vendors/bower_components/switchery/dist/switchery.min.js"></script>
+
+
+<!-- Init JavaScript -->
+<script src="/static/static2/dist/js/init.js"></script>
+<script src="/static/static2/dist/js/dashboard2-data.js"></script>
+
+{% block extra_script %} {% endblock extra_script %}
+
+
+<script src="/static/static2/dist/js/footable-data.js"></script>
+<script>
+	function notification(msg, type){
+		$.toast({
+			heading: msg,
+			position: 'top-right',
+			loaderBg: '#fec107',
+			icon: type,
+			hideAfter: 4000
+		});
+	}
+	{% if user.is_superuser %}
+		$("#ui_dr").append("<li><a href='/homework/grandretro/'>Grand Retro</a></li>");
+		function fields() {
+			$.ajax({
+					url: '/api/',
+					method: 'POST',
+					dataType: 'json',
+					data: {
+						csrfmiddlewaretoken: "{{ csrf_token }}",
+						instructor:"X",
+					}
+			}).done(function (response) {
+						$("#odev_c").addClass("label-success");
+						$("#odev_c").html("aktif");
+						$("#test_c").addClass("label-success");
+						$("#test_c").html("Aktif");
+						$("#incident_c").addClass("label-info");
+						$("#incident_c").html("Inaktif");
+						$("#lab_c").addClass("label-warning");
+						$("#lab_c").html("Inaktif");
+					});
+			}
+			fields();
+	{% else %}
+
+		$.ajax({
+		url:'/api/',
+		method: 'POST',
+		dataType:'json',
+		data:{
+				csrfmiddlewaretoken: "{{csrf_token}}",
+				top_bar:"0",
+			}
+		}).done(function (response) {
+				$("#notify_icon").html(response.count);
+				$(response.notify).each(function(index){$("#notify_area").append(response.notify[index])});
+				///$("#notify_area").append($(this))
+			});
+
+		function fields() {
+			$.ajax({
+					url: '/api/',
+					method: 'POST',
+					dataType: 'json',
+					data: {
+						csrfmiddlewaretoken: "{{ csrf_token }}",
+						test:"0",
+						lab:"0",
+						odev:"0",
+						incident:"0",
+					}
+			}).done(function (response) {
+				if (response.sozcu_sidebar){
+					$("#ui_dr").append("<li><a href='/homework/grandretro/'>Grand Retro</a></li>");
+				}
+				if (response.unread){
+					$("#mesaj_c").addClass("label-success");
+					$("#mesaj_c").html(response.unread);
+				}
+				if (response.debrief){
+					$("#debrief").remove();
+				}
+				if (response.odev) {
+					if(response.odev == '0'){
+						$("#odev_c").addClass("label-success");
+						$("#odev_c").html(response.odev);
+					}
+					else {
+						$("#odev_c").addClass("label-danger");
+						$("#odev_c").html(response.odev);
+					}
+				}
+				if (response.test){
+					if (response.test == 'Bitti'){
+						$("#test_c").addClass("label-success");
+						$("#test_c").html(response.test);
+					}
+					else {
+						$("#test_c").addClass("label-danger");
+						$("#test_c").html(response.test);
+					}
+				}
+				if (response.incident){
+					if(response.incident == 'Aktif'){
+						$("#incident_c").addClass("label-info");
+						$("#incident_c").html(response.incident);
+					}
+					else if(response.incident == 'Inaktif')
+					$("#incident_c").addClass("label-success");
+					$("#incident_c").html(response.incident);
+				}
+				if (response.lab){
+					if(response.lab == '0'){
+						$("#lab_c").addClass("label-warning");
+						$("#lab_c").html("Inaktif");
+					}
+					else{
+						$("#lab_c").addClass("label-success");
+						$("#lab_c").html("Aktif");
+						$("#lab_href").attr("href", "/ranger");
+					}
+				}
+			});
+			}
+
+		function xd() {
+			$.ajax({
+					url: '/api/',
+					method: 'POST',
+					dataType: 'json',
+					data: {
+						csrfmiddlewaretoken: "{{ csrf_token }}",
+						param: 0,
+					}
+			}).done(function (response) {
+					if (response.error_type == "error") {
+						notification(msg=response.errorstring, type=response.error_type);
+					}
+			});
+		};
+		xd();
+		fields();
+		(function loop() {
+			setTimeout(function () {
+				xd();
+				loop()
+			}, 10000);}());
+
+{% endif %}
+
+</script>
+
+<script type="text/javascript" src="/static/ckeditor/ckeditor-init.js"></script>
+<script type="text/javascript" src="/static/ckeditor/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="/static/code_css/prism.js"></script>
+
+
+</body>
+</html>

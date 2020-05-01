@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+
+
+{% load static %}
+<!--load custom_tags  -->
+
+{% block ranger_content %}
+<div class="page-wrapper">
+        <div class="container-fluid">
+    <!-- Title -->
+    <div class="row heading-bg">
+      <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h5 class="txt-dark">Message Inbox</h5>
+      </div>
+      <!-- Breadcrumb -->
+      <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <ol class="breadcrumb">
+        <li><a href="/">Homepage</a></li>
+        <li class="active"><span>Inbox</span></li>
+        </ol>
+      </div>
+      <!-- /Breadcrumb -->
+    </div>
+    <!-- /Title -->
+
+    <!-- Row -->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="panel panel-default border-panel card-view pa-0">
+          <div class="panel-wrapper collapse in">
+            <div class="panel-body pa-0">
+              <div class="chat-cmplt-wrap chat-for-widgets-1">
+                <div class="chat-box-wrap">
+                  <div>
+                    <div class="chatapp-nicescroll-bar">
+                      <ul class="chat-list-wrap">
+                        <li class="chat-list">
+                          <div class="chat-body">
+
+                            {% for friend in friends %}
+                            <a href="javascript:void(0)">
+                              <span class="pull-right label label-success">{{ friend.unread_instructor }}</span>
+                              <div class="chat-data" id="chat_data_{{forloop.counter}}">
+                                <img class="user-img img-circle"  src="{{friend.photo_url}}" alt="{{friend.username}}"/>
+                                <div class="user-data">
+                                  <span value="{{friend.username}}" class="name block capitalize-font">{{friend.name}}</span>
+                                  <span class="time block truncate txt-grey">{{friend.son_mesaj|safe}}</span>
+                                </div>
+                                <div class="status online"></div>
+                                <div class="clearfix"></div>
+                              </div>
+                            </a>
+                            {% endfor %}
+
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="recent-chat-box-wrap">
+                  <div class="recent-chat-wrap">
+                    <div class="panel-heading ma-0 pt-15">
+                      <div class="goto-back">
+                        <a  id="goto_back_widget_1" href="javascript:void(0)" class="inline-block txt-grey">
+                          <i class="zmdi zmdi-account-add"></i>
+                        </a>
+                        <span id="chat_name" attr_chat="{{focused.username}}" class="inline-block txt-dark">{{focused.isim}}</span>
+                        <a href="javascript:void(0)" class="inline-block text-right txt-grey"><i class="zmdi zmdi-more"></i></a>
+                        <div class="clearfix"></div>
+                      </div>
+                    </div>
+                    <div class="panel-wrapper collapse in">
+                      <div class="panel-body pa-0">
+                        {% if chat_box %}
+                        {{chat_box|safe}}
+                        {%endif%}
+                        <div class="input-group">
+                          <input type="text" id="input_msg_send_chatapp" name="send-msg" class="input-msg-send form-control" placeholder="Type something">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /Row -->
+  </div>
+        <!-- Footer -->
+        <footer class="footer container-fluid pl-30 pr-30">
+          <div class="row">
+            <div class="col-sm-12">
+              <p>2020 &copy; Messaging App. Developed by <a class="txt-dark" href="https://www.linkedin.com/in/g%C3%B6ktu%C4%9F-%C3%A7etin-91b112133/">Goko</a></p>
+            </div>
+          </div>
+        </footer>
+        <!-- /Footer -->
+  </div>
+
+
+{% endblock %}
+
+
+{% block extra_script %}
+<script>
+  $(document).on("keypress","#input_msg_send_chatapp",function (e) {
+    if ((e.which == 13)&&(!$(this).val().length == 0)) {
+      var target = $("#chat_name").attr("attr_chat");
+      $.ajax({
+          url: "./",
+          method: 'POST',
+          dataType: 'json',
+          data: {
+            csrfmiddlewaretoken: "{{ csrf_token }}",
+            message:$(this).val(),
+            target:target,
+          }
+        }).done(function (response) {
+            $("#input_msg_send_chatapp").val('');            {# okunan json veriyi, #user idli yere yaz #}
+            if (response.message) {
+              if ($(".chat-for-widgets-1 .chat-content  ul li:last-child").length >= 1){
+                $('<li class="self mb-10"><div class="self-msg-wrap"><div class="msg block pull-right">' + response.message + '<div class="msg-per-detail mt-5"><span class="msg-time txt-grey">'+response.m_date+'</span></div></div></div><div class="clearfix"></div></li>').insertAfter(".chat-for-widgets-1 .chat-content  ul li:last-child");
+              }
+              else if ($(".chat-for-widgets-1 .chat-content  ul li:last-child").length ==0){
+                console.log(response.message);
+                $(".chat-for-widgets-1 .chat-content  ul").html('<li class="self mb-10"><div class="self-msg-wrap"><div class="msg block pull-right">' + response.message + '<div class="msg-per-detail mt-5"><span class="msg-time txt-grey">'+response.m_date+'</span></div></div></div><div class="clearfix"></div></li>');
+              }
+              $(this).val('');
+
+            };
+            $("#input_msg_send_chatapp").val('');
+        });
+    } else if(e.which == 13) {
+      alert('Please type asomthing!');
+    }
+    return;
+  });
+  var chatAppTarget = $('.chat-for-widgets-1.chat-cmplt-wrap');
+
+  {% for value in kursiyerler %}
+
+  $(document).on("click","#chat_data_{{forloop.counter}}",function (e) {
+    var username = $("#chat_data_{{forloop.counter}} .name.block").attr("value");
+    var isim = $("#chat_data_{{forloop.counter}} .name.block").html();
+    $("#chat_name").attr("attr_chat", username);
+    $("#chat_name").html(isim);
+    $.ajax({
+        url: "./",
+        method: 'POST',
+        dataType: 'json',
+        data: {
+          csrfmiddlewaretoken: "{{ csrf_token }}",
+          user:username,
+        }
+      }).done(function (response) {
+          if (response.chat_box) {
+            $(".chat-for-widgets-1 .chat-content  ul").html("");
+            //$(response.chat_box).insertAfter(".chat-for-widgets-1 .chat-content  ul");
+            $(".recent-chat-box-wrap .panel-body .chat-content ul").html(response.chat_box);
+          };
+        });
+
+    var width = $(window).width();
+    if(width<=1007) {
+      chatAppTarget.addClass('chat-box-slide');
+    }
+    return false;
+  });
+
+  {% endfor %}
+
+
+
+  $(document).on("click","#goto_back_widget_1",function (e) {
+    var width = $(window).width();
+    if(width<=1007) {
+      chatAppTarget.removeClass('chat-box-slide');
+    }
+    return false;
+  });
+</script>
+
+{% endblock %}
